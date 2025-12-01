@@ -2,23 +2,42 @@
 #include <fstream>
 #include <string>
 
-int main() {
+struct Instruction {
+    char direction;
+    int value;
+};
+
+int fillInstructions(std::vector<Instruction>& instructions){
     std::ifstream file("1.txt");
     if(!file.is_open()){
         std::cerr << "Error opening file!" << std::endl;
         return 1;
     }
 
-    int pos = 50;
-    int password = 0;
-
     while(!file.eof()){
         std::string line;
         file >> line;
-        
         char dir = line[0];
         int num = std::stoi(line.substr(1));
-        num %= 100;
+
+        Instruction i = {
+            .direction = dir,
+            .value = num
+        };
+        instructions.push_back(i);
+    }
+
+    file.close();
+    return 0;
+}
+
+void part1(std::vector<Instruction>& instructions){
+    int pos = 50;
+    int password = 0;
+
+    for(Instruction i : instructions){
+        char dir = i.direction;
+        int num = i.value % 100;
 
         if(dir == 'L'){
             if(pos - num < 0){
@@ -33,7 +52,7 @@ int main() {
            pos += num;
         }
         else{
-            return 1;
+            return;
         }
 
         if(pos == 0){
@@ -42,7 +61,16 @@ int main() {
     }
 
     std::cout << "Password is: " << password << std::endl;
+}
 
-    file.close();
+int main() {
+    std::vector<Instruction> instructions;
+    int retval = fillInstructions(instructions);
+    if(retval != 0){
+        return retval;
+    }
+
+    part1(instructions);
+    
     return 0;
 }
