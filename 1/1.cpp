@@ -60,7 +60,47 @@ void part1(std::vector<Instruction>& instructions){
         }
     }
 
-    std::cout << "Password is: " << password << std::endl;
+    std::cout << "Part1 Password is: " << password << std::endl;
+}
+
+void part2(std::vector<Instruction>& instructions){
+    int pos = 50;
+    int password = 0;
+
+    for(Instruction i : instructions){
+        char dir = i.direction;
+        int num = i.value % 100;
+        password += (int)i.value / 100;
+
+        if(dir == 'L'){
+            if(pos - num < 0){
+                if(pos - num != 0 && pos != 0){ //(pos == 0): starting from 0
+                    password++;
+                }
+                pos += 100;
+            }
+           pos -= num;
+        }
+        else if(dir == 'R'){
+            if(pos + num > 99){
+                if(pos + num != 100 && pos != 0){ //(pos + num == 100):turned to 0 (pos == 0): starting from 0
+                    password++;
+                }
+                
+                pos -= 100;
+            }
+           pos += num;
+        }
+        else{
+            return;
+        }
+
+        if(pos == 0){
+            password++;
+        }
+    }
+
+    std::cout << "Part2 Password is: " << password << std::endl;
 }
 
 int main() {
@@ -71,6 +111,7 @@ int main() {
     }
 
     part1(instructions);
+    part2(instructions);
     
     return 0;
 }
