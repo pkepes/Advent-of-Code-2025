@@ -2,6 +2,7 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include <cmath>
 
 
 struct idInterval{
@@ -62,11 +63,42 @@ void part1(std::vector<idInterval> idIntervals){
     std::cout << "Part1 solution is: " << sum << std::endl;
 }
 
+void part2(std::vector<idInterval> idIntervals){
+
+    long long int sum = 0;
+
+    for(idInterval i : idIntervals){
+
+        for(long long iter = i.from; iter <= i.to; iter++){
+            std::string s = std::to_string(iter);
+            
+            for(int j = 1; j <= s.size() / 2; j++){
+                std::string subBase = s.substr(0, j);
+                bool found = true;
+                for(int k = 0; k < s.size(); k += j){
+                    std::string subSub = s.substr(k, j);
+                    if(subSub != subBase){
+                        found = false;
+                        break;
+                    }
+                }
+
+                if(found == true){
+                    sum += iter;
+                    break;
+                }
+            }
+        }
+    }
+    std::cout << "Part2 solution is: " << sum << std::endl;
+}
+
 int main(){
     std::vector<idInterval> idIntervals;
     fillIdIntervals(idIntervals);
 
     part1(idIntervals);
+    part2(idIntervals);
 
     return 0;
 }
