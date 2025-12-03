@@ -21,40 +21,37 @@ void fillBatteryBanks(std::vector<std::string>& batteryBanks){
     return;
 }
 
-void part1(std::vector<std::string>& batteryBanks){
+void solution(std::vector<std::string>& batteryBanks, int width){
 
-    int sum = 0;
+    long long int sum = 0;
 
     for(std::string b : batteryBanks){
-        char first = b[0];
-        std::string::size_type firstIdx = 0;
-        char second = '\0';
-
-        for(std::string::size_type i = 0; i < b.size() - 1; i++){
-            if(b[i] > first){
-                first = b[i];
-                firstIdx = i;
-            }
-        }
-
-        for(std::string::size_type i = firstIdx + 1; i < b.size(); i++){
-            if(b[i] > second){
-                second = b[i];
-            }
+        std::string joltsStr;
+        
+        std::string::size_type lastIdx = -1;
+        for(int i = 0; i < width; i++){
+            joltsStr.push_back('\0');
+            for(std::string::size_type j = lastIdx + 1; j < b.size() - (width - 1 - i); j++){
+                if(b[j] > joltsStr[i]){
+                    joltsStr[i] = b[j];
+                    lastIdx = j;
+                }
+            } 
         }
         
-        int jolts = ((int)first - (int)'0') * 10 + ((int)second - (int)'0');
+        long long jolts = std::stoll(joltsStr);
         sum += jolts;
     }
 
-    std::cout << "Part1 solution is: " << sum << std::endl;
+    std::cout << "Solution for " << width << " width batteryBank is: " << sum << std::endl;
 }
 
 int main(){
     std::vector<std::string> batteryBanks;
 
     fillBatteryBanks(batteryBanks);
-    part1(batteryBanks);
+    solution(batteryBanks, 2);
+    solution(batteryBanks, 12);
 
     return 0;
 }
